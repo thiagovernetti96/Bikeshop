@@ -26,12 +26,16 @@ private idCounter: number = 1;
 
   atualizar(id: number, bike: Omit<Bike, 'id'>): Bike | undefined {
     const index = this.bikes.findIndex(b => b.id === id);
-    if (index !== -1) {
-      const updatedBike: Bike = { ...this.bikes[index], ...bike };
-      this.bikes[index] = updatedBike;
-      return updatedBike;
-    }
-    return undefined;
+    if(index===-1)return undefined;
+    const bikeAtualizada:Bike={
+      id,
+      marca:bike.marca,
+      modelo:bike.modelo,
+      valor:bike.valor
+    };
+    this.bikes[index] = bikeAtualizada;
+    return bikeAtualizada; 
+
   }
 
   deletar(id: number): boolean {

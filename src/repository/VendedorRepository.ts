@@ -22,11 +22,13 @@ export class VendedorRepository {
   }
   atualizar (id: number, vendedor: Omit<Vendedor, 'id'>): Vendedor | undefined {
     const index = this.vendedores.findIndex(v => v.id === id);
-    if (index !== -1) {
-      const updatedVendedor: Vendedor = { ...this.vendedores[index], ...vendedor };
-      this.vendedores[index] = updatedVendedor;
-      return updatedVendedor;
+    if (index === -1) return undefined;
+    const vendedorAtualizado:Vendedor={
+      id,
+      nome:vendedor.nome,
+      email:vendedor.email
     }
-    return undefined;
+    this.vendedores[index]= vendedorAtualizado;
+    return vendedorAtualizado;
   }
 }

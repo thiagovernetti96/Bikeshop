@@ -34,7 +34,7 @@ import { AppDataSource } from './data-source';
 
 
 
-AppDataSource.initialize().then((async) => {
+AppDataSource.initialize().then(() => {
 const app = express();
 const port = 3000;
 app.use(express.json());
@@ -68,8 +68,11 @@ const loginController = new LoginController(loginService);
 //Midleware TokenMiddleware
 const tokenMiddleware = new TokenMiddleware(loginService)
 //Rotas
-app.use('/api/login', loginController.realizarLogin);
+app.get('/teste', (req, res) => {
+  res.send('Rota de teste funcionando');
+});
 app.use('/api/usuario', usuarioRouter(usuarioController));
+app.post('/api/login', (req, res) => loginController.realizarLogin(req, res));
 app.use(tokenMiddleware.verificarAcesso.bind(tokenMiddleware));
 app.use('/api/bike', bikeRouter(bikeController));
 app.use('/api/cliente', clienteRouter(clienteController));

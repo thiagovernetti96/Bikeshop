@@ -24,12 +24,14 @@ export class UsuarioRepository {
 
   atualizar(id: number, usuario: Omit<Usuario, 'id'>): Usuario | undefined {
     const index = this.usuarios.findIndex(u => u.id === id);
-    if (index !== -1) {
-      const updatedUsuario: Usuario = { ...this.usuarios[index], ...usuario };
-      this.usuarios[index] = updatedUsuario;
-      return updatedUsuario;
+    if (index === -1) return undefined;
+    const usuarioAtualizado:Usuario={
+      id,
+      email:usuario.email,
+      senha:usuario.senha
     }
-    return undefined;
+    this.usuarios[index]=usuarioAtualizado;
+    return usuarioAtualizado;
   }
 
   deletar(id: number): boolean {

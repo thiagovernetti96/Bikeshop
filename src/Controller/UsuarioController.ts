@@ -10,12 +10,13 @@ export class UsuarioController {
 
   inserir = async (req: Request, res: Response): Promise<void> => {
     const { email, senha } = req.body;
+    console.log('Dados recebidos:', req.body);
     try{ 
-        const novoUsuario = await this.service.inserir({ email, senha });
-        res.status(201).json(novoUsuario);
+      const novoUsuario = await this.service.inserir({ email, senha });
+      res.status(201).json(novoUsuario);
     }
     catch(err:any) {
-        res.status(err.id).json({ error: err.msg });
+      res.status(err.id).json({ error: err.msg });
     }
   };
 

@@ -24,13 +24,17 @@ export class NotaRepository {
   }
   atualizar(id: number, nota: Omit<Nota, 'id'>): Nota | undefined {
     const index = this.notas.findIndex(n => n.id === id);
-    if (index !== -1) {
-      const updatedNota: Nota = { ...this.notas[index], ...nota };
-      this.notas[index] = updatedNota;
-      return updatedNota;
+    if (index === -1) return undefined;
+    const notaAtualizada:Nota={
+      id,
+      valor:nota.valor,
+      data:nota.data
     }
-    return undefined;
+    this.notas[index]=notaAtualizada;
+    return notaAtualizada;
+  
   }
+ 
   deletar(id: number): boolean {
     const index = this.notas.findIndex(nota => nota.id === id);
     if (index !== -1) {

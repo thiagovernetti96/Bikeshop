@@ -24,11 +24,13 @@ export class ClienteRepository {
 
   atualizar(id: number, cliente: Omit<Cliente, 'id'>): Cliente | undefined {
     const index = this.clientes.findIndex(c => c.id === id);
-    if (index !== -1) {
-      const updatedCliente: Cliente = { ...this.clientes[index], ...cliente };
-      this.clientes[index] = updatedCliente;
-      return updatedCliente;
+    if(index===-1)return undefined;
+    const clienteAtualizado:Cliente={
+      id,
+      nome:cliente.nome,
+      email:cliente.email,      
     }
-    return undefined;
+    this.clientes[index]= clienteAtualizado;
+    return clienteAtualizado
   }
 }

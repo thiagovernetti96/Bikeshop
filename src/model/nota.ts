@@ -1,15 +1,18 @@
-import { Entity,PrimaryGeneratedColumn,Column } from "typeorm";
+import { Entity,PrimaryGeneratedColumn,Column, ManyToOne } from "typeorm";
+import { Vendedor } from "./vendedor";
+import {Cliente} from "./cliente";
+import {Bike} from "./bike";
 
 
 @Entity()
 export class Nota{
     @PrimaryGeneratedColumn()
     id?: number
-    @Column()
+    @ManyToOne(()=>Vendedor,(vendedor)=>vendedor.id)
     vendedorId?: number
-    @Column()
+    @ManyToOne(()=>Cliente,(cliente)=>cliente.id)
     clienteId?: number
-    @Column()
+    @ManyToOne(()=>Bike,(bike)=>bike.id)
     bikeId?: number
     @Column()
     valor?: number
