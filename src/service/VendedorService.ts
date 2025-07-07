@@ -39,11 +39,12 @@ export class VendedorService {
   }
 
   async deletar(id: number): Promise<void> {
-    let vendedor = await this.vendedorRepository.findOne({ where: { id } });
-    if (!vendedor) {
-      throw({id:404,msg:"Vendedor não encontrado"});
-    }
-    await this.vendedorRepository.remove(vendedor);
+    return this.vendedorRepository.findOne({ where: { id } }).then((vendedor) => {
+      if (!vendedor) {
+        throw ({id:404,msg:"Vendedor não encontrado"});
+      }
+      return this.vendedorRepository.remove(vendedor).then(() => {});
+    });
   }
 
   async buscarPorNome(nome: string): Promise<Vendedor[]> {

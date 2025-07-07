@@ -1,23 +1,27 @@
 import {Nota} from '../model/nota';
+import { AppDataSource } from "../data-source";
 
 export class NotaRepository {
   private notas: Nota[] = [];
   private idCounter: number = 1;
+  private source = AppDataSource.getRepository(Nota);
 
   inserir(nota: Omit<Nota, 'id'>): Nota {
     const newNota: Nota = {
       id: this.idCounter++,
-      vendedorId: nota.vendedorId,
-      clienteId: nota.clienteId,
-      bikeId: nota.bikeId,
+      vendedor: nota.vendedor,
+      cliente: nota.cliente,
+      bike: nota.bike,
       valor: nota.valor,
       data: nota.data
     };
     this.notas.push(newNota);
     return newNota;
   }
-  listar(): Nota[] {
-    return this.notas;
+  async listar(): Promise<Nota[]> {
+    return await this.source.find({
+      relations: ["cliente", "vendedor", "bike"],
+    });
   }
   buscarporId(id: number): Nota | undefined {
     return this.notas.find(nota => nota.id === id);
@@ -44,13 +48,13 @@ export class NotaRepository {
     return false;
   }
   buscarporVendedorId(vendedorId: number): Nota[] {
-    return this.notas.filter(nota => nota.vendedorId === vendedorId);
+    return this.notas.filter(nota => nota.vendedor === vendedorId);
   }
   buscarporClienteId(clienteId: number): Nota[] {
-    return this.notas.filter(nota => nota.clienteId === clienteId);
+    return this.notas.filter(nota => nota.cliente === clienteId);
   }
   buscarporBikeId(bikeId: number): Nota[] {
-    return this.notas.filter(nota => nota.bikeId === bikeId);
+    return this.notas.filter(nota => nota.bike === bikeId);
   }
   buscarporData(data: Date): Nota[] {
     return this.notas.filter(nota => nota.data === data);

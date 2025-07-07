@@ -4,14 +4,14 @@ export class UsuarioRepository {
   private usuarios: Usuario[] = [];
   private idCounter: number = 1;
 
-  inserir(usuario: Omit<Usuario, 'id'>): Usuario {
+  inserir(usuario: Omit<Usuario, 'id'>):Promise<Usuario> {
     const newUsuario: Usuario = {
       id: this.idCounter++,
       email: usuario.email,
       senha: usuario.senha
     };
     this.usuarios.push(newUsuario);
-    return newUsuario;
+    return Promise.resolve(newUsuario);;
   }
 
   listar(): Usuario[] {

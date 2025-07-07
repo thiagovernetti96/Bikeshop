@@ -8,12 +8,14 @@ import {Bike} from "./bike";
 export class Nota{
     @PrimaryGeneratedColumn()
     id?: number
-    @ManyToOne(()=>Vendedor,(vendedor)=>vendedor.id)
-    vendedorId?: number
-    @ManyToOne(()=>Cliente,(cliente)=>cliente.id)
-    clienteId?: number
-    @ManyToOne(()=>Bike,(bike)=>bike.id)
-    bikeId?: number
+    @ManyToOne(() => Vendedor, { eager: false })
+    vendedor?: Vendedor;
+
+    @ManyToOne(() => Cliente, { eager: false })
+    cliente?: Cliente;
+
+    @ManyToOne(() => Bike, { eager: false })
+    bike?: Bike;
     @Column()
     valor?: number
     @Column()

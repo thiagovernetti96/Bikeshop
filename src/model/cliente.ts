@@ -12,6 +12,6 @@ export class Cliente {
     @Column() 
     email?: string;
 
-    @OneToMany (() => Nota, (nota) => nota.clienteId)
+    @OneToMany (() => Nota, (nota) => nota.cliente)
     notas?: Nota[];
 }

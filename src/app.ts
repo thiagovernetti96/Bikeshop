@@ -36,6 +36,11 @@ import { AppDataSource } from './data-source';
 
 AppDataSource.initialize().then(() => {
 const app = express();
+app.use(express.json());
+const cors = require('cors');
+app.use(cors({
+    origin: '*',
+}))
 const port = 3000;
 app.use(express.json());
 //Inicializar Dependencias
@@ -68,9 +73,6 @@ const loginController = new LoginController(loginService);
 //Midleware TokenMiddleware
 const tokenMiddleware = new TokenMiddleware(loginService)
 //Rotas
-app.get('/teste', (req, res) => {
-  res.send('Rota de teste funcionando');
-});
 app.use('/api/usuario', usuarioRouter(usuarioController));
 app.post('/api/login', (req, res) => loginController.realizarLogin(req, res));
 app.use(tokenMiddleware.verificarAcesso.bind(tokenMiddleware));

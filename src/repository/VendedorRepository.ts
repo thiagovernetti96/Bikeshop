@@ -31,4 +31,13 @@ export class VendedorRepository {
     this.vendedores[index]= vendedorAtualizado;
     return vendedorAtualizado;
   }
+
+  deletar(id:number):boolean{
+     const index = this.vendedores.findIndex(vendedores => vendedores.id === id);
+     if(index!=-1){
+      this.vendedores.splice(index,1)
+      return true
+     }
+     return false
+  }
 }

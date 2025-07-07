@@ -33,14 +33,13 @@ export class ClienteService {
     let clienteExistente = await this.clienteRepository.findOne({ where: { id } });
     console.log(clienteExistente);
     if (!clienteExistente) {
-      throw({id:404,msg:"Cliente não encontrado"});
-    }
-      else {
+      throw ({ id: 404, msg: "Cliente não encontrado" });
+    } else {
       clienteExistente.nome = cliente.nome;
       clienteExistente.email = cliente.email;
-      return await this.repository.save(clienteExistente);
+  
+      return await this.clienteRepository.save(clienteExistente);
     }
-    
   }
   async deletar(id: number): Promise<void> {
     let cliente = await this.clienteRepository.findOne({ where: { id } });

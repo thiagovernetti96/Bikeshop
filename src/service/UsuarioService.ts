@@ -8,18 +8,18 @@ export class UsuarioService {
     this.usuarioRepository = usuarioRepository;
   }
 
-  inserir(usuario: Usuario): Promise<Usuario> {
+  async inserir(usuario: Usuario): Promise<Usuario> {
     if (!usuario.email || !usuario.senha) {
       throw ({id:400,msg:"Email e senha são obrigatórios"});
     }
     return this.usuarioRepository.save(usuario);
   }
 
-  listar(): Promise<Usuario[]> {
+ async listar(): Promise<Usuario[]> {
     return this.usuarioRepository.find();
   }
 
-  buscarporId(id: number): Promise<Usuario | undefined> {
+  async buscarporId(id: number): Promise<Usuario | undefined> {
     return this.usuarioRepository.findOne({ where: { id } }).then((usuario) => {
       if (!usuario) {
         throw ({id:404,msg:"Usuario não encontrado"});
@@ -28,18 +28,20 @@ export class UsuarioService {
     });
   }
 
-  atualizar(id: number, usuario: Usuario): Promise<Usuario | undefined> {
-    return this.usuarioRepository.findOne({ where: { id } }).then((usuarioExistente) => {
-      if (!usuarioExistente) {
-        throw ({id:404,msg:"Usuario não encontrado"});
-      }
+  async atualizar(id: number, usuario: Usuario): Promise<Usuario | undefined> {
+    let usuarioExistente = await this.usuarioRepository.findOne({ where: { id } });
+    console.log(usuarioExistente);
+    if (!usuarioExistente) {
+      throw ({ id: 404, msg: "usuario não encontrado" });
+    } else {
       usuarioExistente.email = usuario.email;
       usuarioExistente.senha = usuario.senha;
-      return this.usuarioRepository.save(usuarioExistente);
-    });
+  
+      return await this.usuarioRepository.save(usuarioExistente);
+    }
   }
 
-  deletar(id: number): Promise<void> {
+ async deletar(id: number): Promise<void> {
     return this.usuarioRepository.findOne({ where: { id } }).then((usuario) => {
       if (!usuario) {
         throw ({id:404,msg:"Usuario não encontrado"});
@@ -48,7 +50,7 @@ export class UsuarioService {
     });
   }
 
-  buscarPorEmail(email: string): Promise<Usuario[]> {
+  async buscarPorEmail(email: string): Promise<Usuario[]> {
     return this.usuarioRepository.find({ where: { email } });
   }
 

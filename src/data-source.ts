@@ -16,4 +16,8 @@ export const AppDataSource = new DataSource({
   entities: [Bike,Cliente,Nota,Vendedor,Usuario],
   migrations: [],
   subscribers: [],
+  
 });
+
+console.log('Conectando ao banco:', AppDataSource.options.database);
+

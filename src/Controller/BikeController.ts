@@ -39,9 +39,12 @@ export class BikeController {
       const {marca, modelo, valor} = req.body;
       const bikeAtualizado = await this.bikeService.atualizar(id,{ marca, modelo,valor});
       res.status(200).json(bikeAtualizado);
-    } catch(err:any){
-      res.status(err.id).json({message: err.msg});
-    }
+    } catch (err: any) {
+      console.error("Erro no atualizar do controller:", err);
+      const statusCode = err.id || 500;
+      const mensagem = err.msg || "Erro ao atualizar bike.";
+      res.status(statusCode).json({ message: mensagem });
+}
   }
 
   async deletar(req: Request, res: Response): Promise<void> {

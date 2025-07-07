@@ -25,7 +25,7 @@ export class UsuarioController {
     res.json(usuarios);
   };
 
-  atualizar = async (req: Request, res: Response): Promise<void> => {
+  async atualizar(req: Request, res: Response): Promise<void>{
     const { id } = req.params;
     const { email, senha } = req.body;
     try {
@@ -59,4 +59,14 @@ export class UsuarioController {
       res.status(err.id).json({ error: err.msg });
     }
   };
+  
+  async buscarporId(req: Request, res: Response): Promise<void> {
+    try {
+      const id = parseInt(req.params.id);
+      const usuario = await this.service.buscarporId(id);
+      res.status(200).json(usuario);
+    } catch(err:any){
+      res.status(err.id).json({message: err.msg});
+    }
+  }
 }

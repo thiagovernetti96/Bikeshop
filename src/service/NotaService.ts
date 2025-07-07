@@ -22,15 +22,43 @@ export class NotaService {
     this.vendedorRepository = vendedorRepository;
   }
 
-  inserir(nota: Nota): Promise<Nota> {
-    if (!nota.bikeId || !nota.clienteId || !nota.vendedorId) {
-      throw ({id:404,msg:"Bike, cliente e vendedor são obrigatórios"});
-    }
-    return this.notaRepository.save(nota);
+ async inserir({
+    valor,
+    data,
+    bikeId,
+    clienteId,
+    vendedorId
+  }: {
+  valor: number;
+  data: string;
+  bikeId: number;
+  clienteId: number;
+  vendedorId: number;
+}): Promise<Nota>{
+  const bike = await this.bikeRepository.findOne({ where: { id: bikeId } });
+  const cliente = await this.clienteRepository.findOne({ where: { id: clienteId } });
+  const vendedor = await this.vendedorRepository.findOne({ where: { id: vendedorId } });
+
+  if (!bike || !cliente || !vendedor) {
+    throw { id: 404, msg: "Bike, cliente ou vendedor não encontrados" };
   }
 
+  const novaNota = this.notaRepository.create({
+    valor,
+    data,
+    bike,
+    cliente,
+    vendedor
+  });
+
+  return await this.notaRepository.save(novaNota);
+};
+
+
   listar(): Promise<Nota[]> {
-    return this.notaRepository.find();
+    return this.notaRepository.find({
+      relations: ["cliente", "vendedor", "bike"],
+    });
   }
 
   buscarporId(id: number): Promise<Nota | undefined> {
@@ -47,9 +75,9 @@ export class NotaService {
       if (!notaExistente) {
         throw ({id:404,msg:"Nota não encontrada"});
       }
-      notaExistente.bikeId = nota.bikeId;
-      notaExistente.clienteId = nota.clienteId;
-      notaExistente.vendedorId = nota.vendedorId;
+      notaExistente.bike = nota.bike;
+      notaExistente.cliente = nota.cliente;
+      notaExistente.vendedor = nota.vendedor;
       return this.notaRepository.save(notaExistente);
     });
   }
@@ -63,15 +91,7 @@ export class NotaService {
     });
   }
 
-  buscarNotaPorCliente(clienteId: number): Promise<Nota[]> {
-    return this.notaRepository.find({ where: { clienteId } });
-  }
+ 
 
-  buscarNotaPorBike(bikeId: number): Promise<Nota[]> {
-    return this.notaRepository.find({ where: { bikeId } });
-  }
-
-  buscarNotaPorVendedor(vendedorId: number): Promise<Nota[]> {
-    return this.notaRepository.find({ where: { vendedorId } });
-  }
+ 
 }

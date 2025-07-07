@@ -27,20 +27,20 @@ export class BikeService {
     return bike;
   }
 
-  async atualizar(id: number, bike: Bike): Promise<Bike | undefined> {
-    let bikeExistente = await this.bikeRepository.findOne({ where: { id } });
-    console.log(bikeExistente);
-    if (!bikeExistente) {
-      throw ({id:404,msg:"Bike não encontrada"});
-    }
-      else {
-      bikeExistente.modelo = bikeExistente.modelo;
-      bikeExistente.valor = bikeExistente.valor;
-      bikeExistente.marca = bikeExistente.marca;
-      return await this.repository.save(bikeExistente);
-    }
-    
+async atualizar(id: number, bike: Bike): Promise<Bike | undefined> {
+  let bikeExistente = await this.bikeRepository.findOne({ where: { id } });
+  console.log(bikeExistente);
+  if (!bikeExistente) {
+    throw ({ id: 404, msg: "Bike não encontrada" });
+  } else {
+    bikeExistente.modelo = bike.modelo;
+    bikeExistente.valor = bike.valor;
+    bikeExistente.marca = bike.marca;
+
+    return await this.bikeRepository.save(bikeExistente);
   }
+}
+
 
   async deletar(id: number): Promise<void> {
     let bike = await this.bikeRepository.findOne({ where: { id } });

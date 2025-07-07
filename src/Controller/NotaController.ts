@@ -8,15 +8,28 @@ export class NotaController {
     this.notaService = notaService;
   }
 
-  async inserir(req: Request, res: Response): Promise<void> {
-    try {
-      const nota = req.body;
-      const novaNota = await this.notaService.inserir(nota);
-      res.status(201).json(novaNota);
-    } catch(err:any){
-      res.status(err.id).json({message: err.msg});
+async inserir(req: Request, res: Response): Promise<void> {
+  try {
+    const { valor, data, bikeId, clienteId, vendedorId } = req.body;
+
+    if (!valor || !data || !bikeId || !clienteId || !vendedorId) {
+      throw { id: 400, msg: "Todos os campos são obrigatórios." };
     }
+
+    const novaNota = await this.notaService.inserir({
+      valor,
+      data,
+      bikeId,
+      clienteId,
+      vendedorId
+    });
+
+    res.status(201).json(novaNota);
+  } catch (err: any) {
+    res.status(err.id || 500).json({ message: err.msg || "Erro ao salvar nota" });
   }
+}
+
 
   async listar(req: Request, res: Response): Promise<void> {
     const notas = await this.notaService.listar();
